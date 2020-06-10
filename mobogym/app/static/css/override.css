@@ -1,0 +1,26 @@
+
+
+/* Fonts */
+@font-face {
+    font-family: 'IranSansWeb';
+    src: url(../fonts/IranSansWeb/IRANSansWeb_Light.ttf) format('truetype'), url(../fonts/IranSansWeb/IRANSansWeb_Light.woff) format('woff');
+}
+
+
+
+html, body {
+    font-family: "IranSansWeb" !important;
+}
+a {
+    font-family: "IranSansWeb" !important;
+}
+#header {
+    background-color: #48466d;
+}
+.module h2, .module caption, .inline-group h2 {
+    background-color: #3d84a8;
+}
+div.breadcrumbs {
+    background-color: #46cdcf;
+}
+
