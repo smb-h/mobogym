@@ -24,11 +24,13 @@ class UserCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'username',
-            'first_name',
-            'last_name',
-            'phone',
+            # 'username',
+            # 'first_name',
+            # 'last_name',
+            # 'phone',
             'email',
+            'age',
+            'gender',
             'password',
             'password2',
         ]
@@ -101,18 +103,22 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     # Create
     def create(self, validated_data):
-        username = validated_data['username']
-        first_name = validated_data['first_name']
-        last_name = validated_data['last_name']
-        phone = validated_data['phone']
+        # username = validated_data['username']
+        # first_name = validated_data['first_name']
+        # last_name = validated_data['last_name']
+        # phone = validated_data['phone']
         email = validated_data['email']
+        age = validated_data['age']
+        gender = validated_data['gender']
         password = validated_data['password']
         user_obj = User(
-                username = username,
-                first_name = first_name,
-                last_name = last_name,
-                phone = phone,
+                username = email,
+                # first_name = first_name,
+                # last_name = last_name,
+                # phone = phone,
                 email = email,
+                age = age,
+                gender = gender,
                 # is_active = False,
                 is_active = True,
                 # is_staff = True,

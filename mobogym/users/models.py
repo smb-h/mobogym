@@ -22,11 +22,18 @@ def user_upload_path(self, filename):
 # User
 class User(AbstractUser):
 
+    # Gender Type
+    class GenderChoices(models.TextChoices):
+        Male = 'male', _('Male')
+        FEMALE = 'female', _('Female')
+
     # OverWrite base email field
     email = models.EmailField(_('Email Address'), blank = True, null = True)
     phone = models.CharField(_('Phone Number'), blank = True, null = True, max_length = 16)
     birth_date = models.DateField(_('Birth Date'), blank = True, null = True)
+    age = models.PositiveIntegerField(_('Age'), blank = True, null = True)
     image = models.ImageField(upload_to = user_upload_path, verbose_name=_("Image"), null=True, blank=True)
+    gender = models.CharField(max_length=8, choices=GenderChoices.choices,default=GenderChoices.Male, verbose_name=_("Gender"))
     # date_joined = jmodels.jDateTimeField(auto_now_add = True, auto_now = False, verbose_name = _('Created'))
     # last_login = jmodels.jDateTimeField(auto_now_add = False, auto_now = True, verbose_name = _('Last login'))
 
