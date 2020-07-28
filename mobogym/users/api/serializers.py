@@ -25,8 +25,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             # 'username',
-            # 'first_name',
-            # 'last_name',
+            'first_name',
+            'last_name',
             # 'phone',
             'email',
             'age',
@@ -104,8 +104,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
     # Create
     def create(self, validated_data):
         # username = validated_data['username']
-        # first_name = validated_data['first_name']
-        # last_name = validated_data['last_name']
+        first_name = validated_data['first_name']
+        last_name = validated_data['last_name']
         # phone = validated_data['phone']
         email = validated_data['email']
         age = validated_data['age']
@@ -113,8 +113,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
         password = validated_data['password']
         user_obj = User(
                 username = email,
-                # first_name = first_name,
-                # last_name = last_name,
+                first_name = first_name,
+                last_name = last_name,
                 # phone = phone,
                 email = email,
                 age = age,
@@ -344,6 +344,16 @@ class UserResetPasswordSerializer(serializers.ModelSerializer):
 
         return data
 
+# User check email Serializer
+class UserCheckEmailSerializer(serializers.ModelSerializer):
+    
+    
+    # Meta
+    class Meta:
+        model = User
+        fields = [
+            'email',
+        ]
 
 
 

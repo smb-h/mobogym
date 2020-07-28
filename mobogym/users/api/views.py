@@ -21,7 +21,8 @@ from users.api.serializers import (
                             GroupSerializer,
                             UserResetPasswordSerializer,
                             UserVerificationSerializer,
-                            UserVerificationCheckSerializer
+                            UserVerificationCheckSerializer,
+                            UserCheckEmailSerializer
                         )
 from django.contrib.auth import authenticate, login, logout
 from app.api.pagination import PostPagination
@@ -412,6 +413,122 @@ class GroupListAPIView(ListAPIView):
 #             return Response(data, status = HTTP_200_OK)
 
 #         return Response(serializer.errors, status = HTTP_400_BAD_REQUEST)
+
+
+# User Retrieve Update API View
+class UserInfoRUAPIView(APIView):
+    serializer_class = UserDetailSerializer
+    permission_classes = [IsOwnerOrReadOnly | IsAdminUser]
+    parser_classes = [MultiPartParser, FormParser]    
+
+    # GET
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        if not user.is_authenticated:
+            return Response({}, status = HTTP_200_OK)
+     
+
+        # User role
+        role = "anonymous"
+        if user.is_superuser:
+            role = "admin"
+        else :
+            role = "user"
+
+        context = {
+            "id": user.id,
+            "username": user.username,
+            "image": user.image.url if user.image else None,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "phone": user.phone,
+            "birth_date": str(user.birth_date),
+            "age": user.age,
+            "gender": user.gender,
+            "role": role,
+            }
+        # Redirect to a success page.
+        return Response(context, status = HTTP_200_OK)
+
+
+    # POST
+    # def post(self, request, *args, **kwargs):
+    #     data = request.data
+    #     user = request.user
+    #     context = {}
+    #     # Image
+    #     # .get(<key>, <default>)
+    #     if data.get('image', False):
+    #         user.image = data.get('image')
+    #         context['image'] = user.image.url
+    #     # Username
+    #     # Read only username
+    #     # if data.get('username', False):
+    #     #     user.username = data.get('username')
+    #     #     context['username'] = data.get('username')
+    #     # Email
+    #     if data.get('email', False):
+    #         qs = User.objects.filter(email = data.get('email')).distinct()
+    #         if qs.count() > 0:
+    #             context['email'] = "ایمیل واردشده ثبت شده است."
+    #         else:
+    #             user.email = data.get('email')
+    #             context['email'] = data.get('email')
+    #     # First name
+    #     if data.get('first_name', False):
+    #         user.first_name = data.get('first_name')
+    #         context['first_name'] = data.get('first_name')
+    #     # Last name
+    #     if data.get('last_name', False):
+    #         user.last_name = data.get('last_name')
+    #         context['last_name'] = data.get('last_name') 
+    #     # Phone           
+    #     if data.get('phone', False):
+    #         user.phone = data.get('phone')
+    #         context['phone'] = data.get('phone')
+    #     # ‌Birth date
+    #     if data.get('birth_date', False):
+    #         user.birth_date = data.get('birth_date')
+    #         context['birth_date'] = data.get('birth_date')
+    #     # Sex
+    #     if data.get('sex', False):
+    #         # Validation
+    #         if data.get('sex') not in ['man', 'woman']:
+    #             context['sex'] = "جنسیت را صحیح وارد کنید."
+    #         else:
+    #             tabaye_user.sex = data.get('sex')
+    #             context['sex'] = data.get('sex') 
+
+    #     user.save()
+
+    #     return Response(context, status = HTTP_200_OK)
+
+
+# User Retrieve Update API View
+class UserCheckEmailView(APIView):
+    serializer_class = UserCheckEmailSerializer
+    permission_classes = [AllowAny]
+    parser_classes = [MultiPartParser, FormParser]    
+
+    # POST
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        user = request.user
+        context = {}
+ 
+        if data.get('email', False):
+            qs = User.objects.filter(email = data.get('email')).distinct()
+            if qs.count() > 0:
+                context['msg'] = "The user has already registered with this email!"
+                return Response(context, status = HTTP_400_BAD_REQUEST)
+            else:
+                context['msg'] = "This email is not registered in the system!"
+
+
+        return Response(context, status = HTTP_200_OK)
+
+
 
 
 
